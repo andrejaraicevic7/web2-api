@@ -1,8 +1,16 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using AutoMapper;
+using BackendAPI.DAL;
+using BackendAPI.Services.Interfaces;
+using BackendAPI.Services;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
+using BackendAPI.DB;
+using BackendAPI.Mapping;
 
 namespace BackendAPI
 {
@@ -74,6 +82,24 @@ namespace BackendAPI
                         .AllowAnyHeader();
                 });
             });
+            services.AddDbContext<WebAPIContext>(options => options.UseSqlServer(Configuration.GetConnectionString("webProjectDatabase")));
+            var emailConfig = Configuration.GetSection("EmailConfiguration").Get<EmailServiceConfiguration>();
+            services.AddSingleton<EmailServiceConfiguration>(emailConfig);
+            services.AddSingleton<IConfiguration>(configuration);
+            var mapperConfig = new MapperConfiguration(mc =>
+            {
+                mc.AddProfile(new MappingProfile());
+            });
+            IMapper mapper = mapperConfig.CreateMapper();
+
+            services.AddSingleton(mapper);
+            services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<IOrderService, OrderService>();
+            services.AddScoped<IProductService, ProductService>();
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IEmailService, EmailService>();
+            services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
+
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
