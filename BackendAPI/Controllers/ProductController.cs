@@ -27,7 +27,7 @@ namespace BackendAPI.Controllers
 
         [HttpGet("sellerProducts")]
         [Authorize(Roles = "seller")]
-        public IActionResult GetProductsForMerchant(string sellerId)
+        public IActionResult GetProductsForSeller(string sellerId)
         {
             return Ok(_productService.GetSellerProducts(sellerId));
         }

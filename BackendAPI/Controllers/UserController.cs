@@ -44,7 +44,7 @@ namespace BackendAPI.Controllers
 
         [HttpPost("blockSeller")]
         [Authorize(Roles = "admin")]
-        public IActionResult BlockMerchant(string sellerId)
+        public IActionResult BlockSeller(string sellerId)
         {
             try
             {

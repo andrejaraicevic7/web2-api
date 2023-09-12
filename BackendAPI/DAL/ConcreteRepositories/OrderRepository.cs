@@ -14,9 +14,7 @@ namespace BackendAPI.DAL.ConcreteRepositories
 
         public void AddItem(Order item)
         {
-            var orders = dbContext.Orders.AsNoTracking().ToList();
-            orders.Add(item);
-            dbContext.SaveChanges();
+            dbContext.Orders.Add(item);
         }
 
         public Order GetItemById(string id)
@@ -26,7 +24,7 @@ namespace BackendAPI.DAL.ConcreteRepositories
 
         public List<Order> GetItems()
         {
-            return dbContext.Orders.ToList();
+            return dbContext.Orders.Include(x => x.OrderedProducts).ToList();
         }
 
         public bool ItemExists(string id)

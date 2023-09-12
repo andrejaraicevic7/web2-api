@@ -90,7 +90,7 @@ namespace BackendAPI.Services
         public List<OrderDto> GetSellerAllOrders(string email)
         {
             List<Order> orders = new List<Order>(0);
-            foreach (var order in repository.Order.GetItems())
+            foreach (var order in repository.Order.GetItems().Where(x => x.OrderStatus == OrderStatus.Completed).ToList())
             {
                 if (order.OrderedProducts.Select(x => x.Seller == email).Any())
                 {
@@ -102,8 +102,7 @@ namespace BackendAPI.Services
 
         public List<OrderDto> GetShopperCanceledOrders(string email)
         {
-            var list = repository.Order.GetItems().Where(x => x.OrderStatus == OrderStatus.Canceled && x.CustomerEmail.Equals(email));
-            return mapper.Map<List<OrderDto>>(repository.Order.GetItems().Where(x => x.OrderStatus == OrderStatus.Canceled && x.CustomerEmail.Equals(email)).ToList());
+            return mapper.Map<List<OrderDto>>(repository.Order.GetItems().Where(x => x.OrderStatus == OrderStatus.Completed && x.CustomerEmail.Equals(email)).ToList());
         }
 
         public List<OrderDto> GetSellerNewOrders(string email)

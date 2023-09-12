@@ -41,9 +41,9 @@ namespace BackendAPI.Controllers
             return Ok(_orderService.GetShopperNonCanceledOrders(email));
         }
 
-        [HttpGet("getCanceledOrders")]
+        [HttpGet("getCompletedOrders")]
         [Authorize(Roles = "shopper")]
-        public IActionResult GetCanceledOrders(string email)
+        public IActionResult GetCompletedOrders(string email)
         {
             _orderService.CheckCompletedOrders();
             return Ok(_orderService.GetShopperCanceledOrders(email));
@@ -75,7 +75,7 @@ namespace BackendAPI.Controllers
 
         [HttpGet("getNewOrdersSeller")]
         [Authorize(Roles = "seller")]
-        public IActionResult GetNewOrdersMerchant(string email)
+        public IActionResult GetNewOrdersSeller(string email)
         {
             _orderService.CheckCompletedOrders();
             return Ok(_orderService.GetSellerNewOrders(email));
@@ -84,7 +84,7 @@ namespace BackendAPI.Controllers
 
         [HttpGet("getAllOrdersSeller")]
         [Authorize(Roles = "seller")]
-        public IActionResult GetAllOrdersMerchant(string email)
+        public IActionResult GetAllOrdersSeller(string email)
         {
             _orderService.CheckCompletedOrders();
             return Ok(_orderService.GetSellerAllOrders(email));
